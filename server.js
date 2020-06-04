@@ -4,7 +4,7 @@ require("dotenv").config({
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const port = process.env.PORT || 5000);
+const port = (process.env.PORT || 5000);
 const verifyWebhook = require("./verify-webhook");
 const messageWebhook = require("./message-webhook");
 const app = express();
