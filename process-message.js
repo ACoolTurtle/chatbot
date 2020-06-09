@@ -94,7 +94,33 @@ const sendImageMessage = (userId, url, text) => {
       headers: {
         "Content-Type": "application/json"
       },
-      method: "POST"
+      method: "POST",
+      body: JSON.stringify([
+        {
+          messaging_type: "RESPONSE",
+          recipient: {
+            id: userId
+          },
+          message: {
+            attachment: {
+              type: "image",
+              payload: {
+                url: url,
+                is_reusable: true
+              }
+            }
+          }
+        },
+        {
+          messaging_type: "RESPONSE",
+          recipient: {
+            id: userId
+          },
+          message: {
+            text
+          }
+        }
+      ])
     }
   )
     .then(res => res.json())
