@@ -64,7 +64,7 @@ const setRead = userId => {
 
 const sendImageMessage = (userId, url, text) => {
   return fetch(
-    `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}&batch=`,
+    `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}&?batch`,
     {
       headers: {
         "Content-Type": "application/json"
