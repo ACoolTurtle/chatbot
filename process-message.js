@@ -64,41 +64,41 @@ const setRead = userId => {
 
 const sendImageMessage = (userId, url, text) => {
   return fetch(
-    `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}&?recipient=${userId}&?batch=${JSON.stringify([
-        {
-          messaging_type: "RESPONSE",
-          recipient: {
-            id: userId
-          },
-          message: {
-            attachment: {
-              type: "image",
-              payload: {
-                url: url,
-                is_reusable: true
-              }
-            }
-          }
-        },
-        {
-          messaging_type: "RESPONSE",
-          recipient: {
-            id: userId
-          },
-          message: {
-            text
-          }
-        }
-      ])}`,
+    `https://graph.facebook.com/v7.0?access_token=${FACEBOOK_ACCESS_TOKEN}`,
     {
       headers: {
         "Content-Type": "application/json"
       },
       method: "POST",
       body: JSON.stringify({
-        recipient: {
-            id: userId
+        batch: [
+          {
+            messaging_type: "RESPONSE",
+            relative_url: "me/messages",
+            recipient: {
+              id: userId
+            },
+            message: {
+              attachment: {
+                type: "image",
+                payload: {
+                  url: url,
+                  is_reusable: true
+                }
+              }
+            }
+          },
+          {
+            messaging_type: "RESPONSE",
+            relative_url: "me/messages",
+            recipient: {
+              id: userId
+            },
+            message: {
+              text
+            }
           }
+        ]
       })
     }
   )
