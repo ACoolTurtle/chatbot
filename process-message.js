@@ -41,7 +41,7 @@ const setTyping = userId => {
       })
     }
   );
-
+};
 
 const setRead = userId => {
   return fetch(
@@ -76,6 +76,7 @@ const sendImageMessage = (userId, url) => {
           id: userId
         },
         message: {
+          text: "Hello",
           attachment: {
             type: "image",
             payload: {
@@ -86,7 +87,8 @@ const sendImageMessage = (userId, url) => {
         }
       })
     }
-  );
+  ).then(res => res.json())
+    .then(json => console.log(json));
 };
 
 const sendQuickReplyMessage = (userId, text, replies) => {

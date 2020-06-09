@@ -3,6 +3,7 @@ const { FACEBOOK_ACCESS_TOKEN } = process.env;
 const fetch = require("node-fetch");
 
 module.exports = (req, res) => {
+  //console.log(req);
   if (req.body.object === "page") {
     req.body.entry.forEach(entry => {
       entry.messaging.forEach(event => {
