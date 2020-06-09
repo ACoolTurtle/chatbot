@@ -62,32 +62,49 @@ const setRead = userId => {
   );
 };
 
-const sendImageMessage = (userId, url) => {
+const sendImageMessage = (userId, url, text) => {
   return fetch(
     `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`,
-    {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify({
-        messaging_type: "RESPONSE",
-        recipient: {
-          id: userId
+    [
+      {
+        headers: {
+          "Content-Type": "application/json"
         },
-        message: {
-          attachment: {
-            type: "image",
-            payload: {
-              url: url,
-              title: "Hello",
-              is_reusable: true
+        method: "POST",
+        body: JSON.stringify({
+          messaging_type: "RESPONSE",
+          recipient: {
+            id: userId
+          },
+          message: {
+            attachment: {
+              type: "image",
+              payload: {
+                url: url,
+                is_reusable: true
+              }
             }
           }
-        }
-      })
-    }
-  ).then(res => res.json())
+        })
+      },
+      {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+        body: JSON.stringify({
+          messaging_type: "RESPONSE",
+          recipient: {
+            id: userId
+          },
+          message: {
+            text
+          }
+        })
+      }
+    ]
+  )
+    .then(res => res.json())
     .then(json => console.log(json));
 };
 
@@ -197,14 +214,14 @@ function determineIntent(message, userId, info) {
       case "who_is_jesus":
         setTyping(userId);
         setRead(userId);
-        sendTextMessage(
+        /*sendTextMessage(
           userId,
           "Jesus is the Son of God and our loving Savior. He lived to teach us, and  He suffered and died to save us from sin and death. Because of Him, we  can be forgiven, we can overcome challenges, and we can live with God  again someday.",
           "https://assets.ldscdn.org/c9/21/c921f1ca8b509f367491922c1db697bc548a6f80/christ_rich_man_hofmann_art.jpeg"
-        );
+        );*/
         sendImageMessage(
           userId,
-          "https://assets.ldscdn.org/c9/21/c921f1ca8b509f367491922c1db697bc548a6f80/christ_rich_man_hofmann_art.jpeg"
+          "https://assets.ldscdn.org/c9/21/c921f1ca8b509f367491922c1db697bc548a6f80/christ_rich_man_hofmann_art.jpeg", "Jesus is the Son of God and our loving Savior. He lived to teach us, and  He suffered and died to save us from sin and death. Because of Him, we  can be forgiven, we can overcome challenges, and we can live with God  again someday."
         );
         break;
       case "meet_missionaries":
