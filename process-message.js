@@ -41,7 +41,7 @@ const setTyping = userId => {
       })
     }
   );
-};
+
 
 const setRead = userId => {
   return fetch(
