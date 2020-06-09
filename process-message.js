@@ -195,7 +195,15 @@ const sendBeliefsVideo = userId => {
               elements: [
                 {
                   media_type: "video",
-                  url: "https://www.facebook.com/ComeUntoChrist/videos/1834287723271507"
+                  url:
+                    "https://www.facebook.com/ComeUntoChrist/videos/1834287723271507",
+                  buttons: [
+                    {
+                      type: "postback",
+                      title: "I want to learn more!",
+                      payload: "meet_missionaries"
+                    }
+                  ]
                 }
               ]
             }
