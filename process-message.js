@@ -86,7 +86,8 @@ const sendImageMessage = (userId, url) => {
         }
       })
     }
-  ).then(res => res.json())
+  )
+    .then(res => res.json())
     .then(json => console.log(json));
 };
 
@@ -173,6 +174,39 @@ const sendBookMessage = userId => {
   );
 };
 
+const sendBeliefsVideo = userId => {
+  return fetch(
+    `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`,
+    {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify({
+        messaging_type: "RESPONSE",
+        recipient: {
+          id: userId
+        },
+        message: {
+          attachment: {
+            type: "template",
+            payload: {
+              template_type: "media",
+              elements: [
+                {
+                  media_type: "video",
+                  url: "https://www.facebook.com/ComeUntoChrist/videos/1834287723271507"
+                }
+              ]
+            }
+          }
+          //text
+        }
+      })
+    }
+  );
+};
+
 function determineIntent(message, userId, info) {
   if (message.confidence >= 0.8) {
     switch (message.value) {
@@ -192,6 +226,7 @@ function determineIntent(message, userId, info) {
               : "Hey!"
           } As Christians, we believe in learning all we can about Jesus. The greatest happiness in life comes from following the Savior. You will feel His love for you as you seek to understand His life and teachings.`
         );
+        sendBeliefsVideo(userId);
         break;
       case "who_is_jesus":
         setTyping(userId);
