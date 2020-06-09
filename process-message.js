@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 
 // Don't forget to add it to your `.env` file.
 const { FACEBOOK_ACCESS_TOKEN } = process.env;
-var userNameObject = {};
+
 const sendTextMessage = (userId, text) => {
   return fetch(
     `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`,
@@ -76,11 +76,11 @@ const sendImageMessage = (userId, url) => {
           id: userId
         },
         message: {
-          text: "Hello",
           attachment: {
             type: "image",
             payload: {
               url: url,
+              title: "Hello",
               is_reusable: true
             }
           }
@@ -314,3 +314,28 @@ module.exports = {
   handlePostback
 };
 
+//Set the API
+
+/*
+curl -X POST -H "Content-Type: application/json" -d '{
+        "persistent_menu": [{
+            "locale": "default",
+            "composer_input_disabled": false,
+            "call_to_actions": [{
+                    "type": "postback",
+                    "title": "What is the Book of Mormon",
+                    "payload": "info_book"
+                },
+                {
+                    "type": "postback",
+                    "title": "What are your basic beliefs?",
+                    "payload": "basic_beliefs"
+                },
+                {
+                    "type": "postback",
+                    "title": "I want to meet missionaries.",
+                    "payload": "meet_missionaries"
+                }
+            ]
+        }]
+}' "https://graph.facebook.com/v7.0/me/messenger_profile?access_token=<token>"*/
