@@ -65,13 +65,13 @@ const setRead = userId => {
 const sendImageMessage = (userId, url, text) => {
   return fetch(
     `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}&batch=`,
-    [
-      {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        method: "POST",
-        body: JSON.stringify({
+    {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify([
+        {
           messaging_type: "RESPONSE",
           recipient: {
             id: userId
@@ -85,14 +85,8 @@ const sendImageMessage = (userId, url, text) => {
               }
             }
           }
-        })
-      },
-      {
-        headers: {
-          "Content-Type": "application/json"
         },
-        method: "POST",
-        body: JSON.stringify({
+        {
           messaging_type: "RESPONSE",
           recipient: {
             id: userId
@@ -100,9 +94,9 @@ const sendImageMessage = (userId, url, text) => {
           message: {
             text
           }
-        })
-      }
-    ]
+        }
+      ])
+    }
   )
     .then(res => res.json())
     .then(json => console.log(json));
@@ -221,7 +215,8 @@ function determineIntent(message, userId, info) {
         );*/
         sendImageMessage(
           userId,
-          "https://assets.ldscdn.org/c9/21/c921f1ca8b509f367491922c1db697bc548a6f80/christ_rich_man_hofmann_art.jpeg", "Jesus is the Son of God and our loving Savior. He lived to teach us, and  He suffered and died to save us from sin and death. Because of Him, we  can be forgiven, we can overcome challenges, and we can live with God  again someday."
+          "https://assets.ldscdn.org/c9/21/c921f1ca8b509f367491922c1db697bc548a6f80/christ_rich_man_hofmann_art.jpeg",
+          "Jesus is the Son of God and our loving Savior. He lived to teach us, and  He suffered and died to save us from sin and death. Because of Him, we  can be forgiven, we can overcome challenges, and we can live with God  again someday."
         );
         break;
       case "meet_missionaries":
