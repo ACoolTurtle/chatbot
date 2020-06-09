@@ -314,28 +314,3 @@ module.exports = {
   handlePostback
 };
 
-//Set the API
-
-/*
-curl -X POST -H "Content-Type: application/json" -d '{
-        "persistent_menu": [{
-            "locale": "default",
-            "composer_input_disabled": false,
-            "call_to_actions": [{
-                    "type": "postback",
-                    "title": "What is the Book of Mormon",
-                    "payload": "info_book"
-                },
-                {
-                    "type": "postback",
-                    "title": "What are your basic beliefs?",
-                    "payload": "basic_beliefs"
-                },
-                {
-                    "type": "postback",
-                    "title": "I want to meet missionaries.",
-                    "payload": "meet_missionaries"
-                }
-            ]
-        }]
-}' "https://graph.facebook.com/v7.0/me/messenger_profile?access_token=<token>"*/
