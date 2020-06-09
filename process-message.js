@@ -322,6 +322,26 @@ function determineIntent(message, userId, info) {
           "https://www.facebook.com/ComeUntoChrist/videos/1328179177215700"
         );
         break;
+        case "life_purpose":
+        setTyping(userId);
+        setRead(userId);
+        sendTextMessage(
+          userId,
+          "Life is a proving ground for us.\nGod sent us to earth to learn and grow through experiences, both pleasant and painful. He lets us choose between good and evil and lets us decide whether we will serve others or focus only about ourselves. The challenge is to have faith in His plan even though we don’t have all of the answers. Because we all make mistakes, God sent His Son, Jesus Christ, so we can be cleansed and forgiven. When we accept Jesus and follow His example, we become less selfish and can enjoy greater love, peace, and joy."
+        );
+        sendMediaTemplate(
+          userId,
+          [
+            {
+              type: "postback",
+              title: "Can I learn more?",
+              payload: "meet_missionaries"
+            }
+          ],
+          "video",
+          "https://www.facebook.com/ComeUntoChrist/videos/880555581978064"
+        );
+        break;
       default:
         break;
     }
