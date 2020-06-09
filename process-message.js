@@ -174,7 +174,7 @@ const sendBookMessage = userId => {
   );
 };
 
-const sendBeliefsVideo = userId => {
+const sendMediaTemplate = (userId, buttons, type, link) => {
   return fetch(
     `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`,
     {
@@ -194,16 +194,9 @@ const sendBeliefsVideo = userId => {
               template_type: "media",
               elements: [
                 {
-                  media_type: "video",
-                  url:
-                    "https://www.facebook.com/ComeUntoChrist/videos/1834287723271507",
-                  buttons: [
-                    {
-                      type: "postback",
-                      title: "I want to learn more!",
-                      payload: "meet_missionaries"
-                    }
-                  ]
+                  media_type: type,
+                  url: link,
+                  buttons: buttons
                 }
               ]
             }
@@ -234,7 +227,18 @@ function determineIntent(message, userId, info) {
               : "Hey!"
           } As Christians, we believe in learning all we can about Jesus. The greatest happiness in life comes from following the Savior. You will feel His love for you as you seek to understand His life and teachings.`
         );
-        sendBeliefsVideo(userId);
+        sendMediaTemplate(
+          userId,
+          [
+            {
+              type: "postback",
+              title: "I want to learn more!",
+              payload: "meet_missionaries"
+            }
+          ],
+          "video",
+          "https://www.facebook.com/ComeUntoChrist/videos/1834287723271507"
+        );
         break;
       case "who_is_jesus":
         setTyping(userId);
@@ -244,9 +248,21 @@ function determineIntent(message, userId, info) {
           "Jesus is the Son of God and our loving Savior. He lived to teach us, and  He suffered and died to save us from sin and death. Because of Him, we  can be forgiven, we can overcome challenges, and we can live with God  again someday.",
           "https://assets.ldscdn.org/c9/21/c921f1ca8b509f367491922c1db697bc548a6f80/christ_rich_man_hofmann_art.jpeg"
         );
-        sendImageMessage(
+        /*sendImageMessage(
           userId,
           "https://assets.ldscdn.org/c9/21/c921f1ca8b509f367491922c1db697bc548a6f80/christ_rich_man_hofmann_art.jpeg"
+        );*/
+        sendMediaTemplate(
+          userId,
+          [
+            {
+              type: "postback",
+              title: "How do I learn more?",
+              payload: "meet_missionaries"
+            }
+          ],
+          "video",
+          "https://www.facebook.com/ComeUntoChrist/videos/1844677835565829"
         );
         break;
       case "meet_missionaries":
