@@ -301,6 +301,22 @@ function determineIntent(message, userId, info) {
               : "Hey!"
           } Like the Bible, the Book of Mormon is an ancient record that  teaches about Jesus. It answers essential questions that we all have: Is there life after death, what is the purpose of life, and how can I find happiness and peace now? People from all over the world, and from all  walks of life, are learning that the Book of Mormon can help us become better people and feel closer to God.`
         );
+        sendMediaTemplate(userId,
+                         [
+            {
+              type: "postback",
+              title: "Request a Copy",
+              payload: "request_book"
+            },
+          {
+              type: "postback",
+              title: "Learn More",
+              payload: "meet_missionaries"
+            }
+          
+          ],
+          "video",
+          "https://www.facebook.com/ComeUntoChrist/videos/880047042028918")
         break;
         case "info_bible":
         setTyping(userId);
