@@ -368,6 +368,22 @@ function determineIntent(message, userId, info) {
 }
 
 function continuePayload(message, userId) {
+  if(message.nlp.entities.phone_number != undefined){
+    if (message.nlp.entities.phone_number[0].confidence > .9) {
+      sendTextMessage(
+        userId,
+        "Thanks! We will get back to you shortly."
+      );
+    }
+  } else if(message.nlp.entities.email != undefined){
+    if (message.nlp.entities.email[0].confidence > .9) {
+      sendTextMessage(
+        userId,
+        "Alright, we will get in contact shortly!"
+      );
+    }
+  } 
+  else {
   switch (message.quick_reply.payload) {
     case "request_phone":
       setTyping(userId);
@@ -400,6 +416,7 @@ function continuePayload(message, userId) {
     default:
       break;
   }
+  }
 }
 
 function handleMessage(event, info) {
@@ -409,6 +426,7 @@ function handleMessage(event, info) {
     event.message.quick_reply != undefined &&
     typeof event.message.nlp.entities.intent === "undefined"
   ) {
+    console.log(JSON.stringify(event));
     return continuePayload(event.message, userId);
   } else if (typeof event.message.nlp.entities.intent === "undefined") {
     return;
