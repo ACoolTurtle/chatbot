@@ -1,3 +1,4 @@
+//Keep the secret id secret and stuff
 require("dotenv").config({
   path: ".env"
 });
