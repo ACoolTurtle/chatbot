@@ -1,7 +1,7 @@
 [![Run on Repl.it](https://repl.it/badge/github/mysecretgithub386/chatbot)](https://repl.it/github/mysecretgithub386/chatbot)
 # Chat Bot
 
-A server that serves a webook for Facebook, using Dialogflow for a user friendly experience
+A server that serves a webhook for Facebook, using Dialogflow for a user friendly experience
 
 
 ## Your Project
