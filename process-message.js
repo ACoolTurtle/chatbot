@@ -3,6 +3,7 @@ const fetch = require("node-fetch");
 // Don't forget to add it to your `.env` file.
 const { FACEBOOK_ACCESS_TOKEN } = process.env;
 
+//Pass the userID and string that you want the bot to return to the user
 const sendTextMessage = (userId, text) => {
   return fetch(
     `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`,
@@ -24,6 +25,7 @@ const sendTextMessage = (userId, text) => {
   );
 };
 
+// Call, passing userID in order to trigger bot typing animation. Keep in mind that sending a message directly after this call will cancel the typing animation.
 const setTyping = userId => {
   return fetch(
     `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`,
@@ -43,6 +45,7 @@ const setTyping = userId => {
   );
 };
 
+// Similar to setTyping, pass the userID and the bot will set the message as read. This is implicitly called on the serverside when a message or action is sent.
 const setRead = userId => {
   return fetch(
     `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`,
@@ -62,6 +65,7 @@ const setRead = userId => {
   );
 };
 
+// Pass through the userID string, along with the string of the image url you wish to use in order to send it to the user.
 const sendImageMessage = (userId, url) => {
   return fetch(
     `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`,
@@ -91,6 +95,28 @@ const sendImageMessage = (userId, url) => {
     .then(json => console.log(json));
 };
 
+/*
+Similar to sendTextMessage, but pass an array of quick replies in the following format:
+          [{
+              content_type: "text",
+              title: "Email",
+              payload: "request_email"
+            },
+            {
+              content_type: "text",
+              title: "Phone",
+              payload: "request_phone"
+            },
+            {
+              content_type: "text",
+              title: "Video Call",
+              payload: "request_video"
+            }
+          ]
+
+  Refer to Facebook API for supported content_type, title is the name that you wish to appear on the quick reply, payload is what is returned to the bot when
+  the end user selects a quick reply.
+*/
 const sendQuickReplyMessage = (userId, text, replies) => {
   return fetch(
     `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`,
@@ -112,7 +138,10 @@ const sendQuickReplyMessage = (userId, text, replies) => {
     }
   );
 };
-
+/*
+This likely needs to be refactored to be more than a single use call. Currently passing the userID of the end user will 
+send them a collection featuring how to install the Book of Mormon on their device
+*/
 const sendBookMessage = userId => {
   return fetch(
     `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`,
@@ -174,6 +203,20 @@ const sendBookMessage = userId => {
   );
 };
 
+/*
+Pass this the userID, an array of buttons, the link that the user gets by clicking the template and the type.
+Example usage:
+ sendMediaTemplate(
+   userId,
+   [{
+     type: "postback", // Refer to Facebook api, postback means that when it is clicked the bot is sent the payload in the text.
+     title: "I want to learn more!", // Text that you want on the button
+     payload: "meet_missionaries" // payload returned to bot when button selected
+   }],
+   "video",
+   "https://www.facebook.com/ComeUntoChrist/videos/1834287723271507"
+ )
+*/
 const sendMediaTemplate = (userId, buttons, type, link) => {
   return fetch(
     `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`,
@@ -208,6 +251,15 @@ const sendMediaTemplate = (userId, buttons, type, link) => {
   );
 };
 
+/*
+Pass this the message object, userId and the info object, and it will automatically determine if the message is within the scope of Wit.Ai and reply with the proper message.
+Example usage:
+function handlePostback(event, info) {
+  const userId = event.sender.id;
+  const payload = event.postback.payload;
+  return determineIntent({ confidence: 1, value: payload }, userId, info);
+}
+*/
 function determineIntent(message, userId, info) {
   if (message.confidence >= 0.8) {
     switch (message.value) {
@@ -367,6 +419,12 @@ function determineIntent(message, userId, info) {
   }
 }
 
+/*
+This is a stub that likely needs to be reworked at some point.
+Currently this continues responding to the user when they select
+a quickreply message or a message with a payload, for scheduling an appointment.
+For usage, as it is only used once, view handlerMessage()
+*/
 function continuePayload(message, userId) {
   if(message.nlp.entities.phone_number != undefined){
     if (message.nlp.entities.phone_number[0].confidence > .9) {
@@ -418,7 +476,12 @@ function continuePayload(message, userId) {
   }
   }
 }
-
+/*
+This is the main entry point of this entire module. 
+handleMessage takes the event object (message text, Wit.AI data, etc) and the info object (Users name, etc).
+Based on what is contained within the event object this function will complete scheduling an appointment,
+starting a conversation etc.
+*/
 function handleMessage(event, info) {
   const userId = event.sender.id;
   const message = event.message.text;
@@ -435,6 +498,7 @@ function handleMessage(event, info) {
   }
 }
 
+// Secondary entry point, called when event contains a postback, and handles the appropriate response.
 function handlePostback(event, info) {
   const userId = event.sender.id;
   const payload = event.postback.payload;

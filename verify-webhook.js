@@ -1,3 +1,4 @@
+//Verify webhook with Facebook so it doesn't ban the bot.
 const verifyWebhook = (req, res) => {
   let VERIFY_TOKEN = "James1:5";
 
