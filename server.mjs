@@ -1,7 +1,4 @@
 //Keep the secret id secret and stuff
-/*require("dotenv").config({
-  path: ".env"
-});*/
 
 
 import dotenv from 'dotenv';
@@ -10,7 +7,7 @@ import bodyParser from 'body-parser';
 import verifyWebhook from './verify-webhook.js';
 import messageWebhook from './message-webhook.js';
 import express from 'express';
-import processMessage from './process-message.js';
+import processMessage from './process-message.mjs';
 import crypto from 'crypto';
 dotenv.config({
   path: ".env"
@@ -56,21 +53,22 @@ const verifyRequestSignature = (req, res, buf) => {
 };
 
 messenger.on('message', (event) => {
+  messenger.senderAction('mark_seen', event.sender.id);
+  messenger.senderAction('typing_on', event.sender.id);
   console.log(JSON.stringify(event));
   console.log(JSON.stringify(event.sender.id));
   messenger.getUser(event.sender.id)
   .then((user) => {
-    console.log(JSON.stringify(user));
-    console.log("user" + user);
     handleMessage(event, user)
   })
   //handleMessage(event, );
 });
 
 messenger.on('postback', (event) => {
+  messenger.senderAction('typing_on', event.sender.id);
   messenger.getUser(event.sender.id)
   .then((user) => {
-    //handlePostback(event, user)
+    handlePostback(event, user)
   })
 });
 
