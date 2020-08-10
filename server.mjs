@@ -60,16 +60,17 @@ messenger.on('message', (event) => {
   console.log(JSON.stringify(event.sender.id));
   messenger.getUser(event.send.id)
   .then((user) => {
+    console.log(JSON.stringify(user));
     handleMessage(event, user)
   })
   //handleMessage(event, );
 });
 
 messenger.on('postback', (event) => {
-  /*messenger.getUser()
+  messenger.getUser(event.send.id)
   .then((user) => {
-    //handlePostback(event, user)
-  }, event.sender.id)*/
+    handlePostback(event, user)
+  })
 });
 
 // Verify the webhook, calls verifyWebhook which confirms it is 
