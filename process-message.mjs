@@ -17,6 +17,7 @@ const {
   Address,
   Summary,
   Adjustment,
+  Text
 } = fbMessenger;
 
 // Don't forget to add it to your `.env` file.
