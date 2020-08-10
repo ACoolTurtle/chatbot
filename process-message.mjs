@@ -30,72 +30,18 @@ const messenger = new Messenger({
 
 //Pass the userID and string that you want the bot to return to the user
 const sendTextMessage = (userId, text) => {
-  return fetch(
-    `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`, {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify({
-        messaging_type: "RESPONSE",
-        recipient: {
-          id: userId
-        },
-        message: {
-          text
-        }
-      })
-    }
-  );
+  messenger.send({
+    text: text
+  }, userId);
 };
 
-
-// Similar to setTyping, pass the userID and the bot will set the message as read. This is implicitly called on the serverside when a message or action is sent.
-const setRead = userId => {
-  return fetch(
-    `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`, {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify({
-        messaging_type: "RESPONSE",
-        recipient: {
-          id: userId
-        },
-        sender_actions: "mark_seen"
-      })
-    }
-  );
-};
 
 // Pass through the userID string, along with the string of the image url you wish to use in order to send it to the user.
 const sendImageMessage = (userId, url) => {
-  return fetch(
-      `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`, {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        method: "POST",
-        body: JSON.stringify({
-          messaging_type: "RESPONSE",
-          recipient: {
-            id: userId
-          },
-          message: {
-            attachment: {
-              type: "image",
-              payload: {
-                url: url,
-                is_reusable: true
-              }
-            }
-          }
-        })
-      }
-    )
-    .then(res => res.json())
-    .then(json => console.log(json));
+  messenger.send(new Image({
+    url: url,
+    is_reusable: true
+  }), userId)
 };
 
 /*
@@ -121,80 +67,43 @@ Similar to sendTextMessage, but pass an array of quick replies in the following 
   the end user selects a quick reply.
 */
 const sendQuickReplyMessage = (userId, text, replies) => {
-  return fetch(
-    `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`, {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify({
-        messaging_type: "RESPONSE",
-        recipient: {
-          id: userId
-        },
-        message: {
-          text,
-          quick_replies: replies
-        }
-      })
-    }
-  );
+  messenger.send(Object.assign(new Text(text), replies), userId);
 };
 /*
 This likely needs to be refactored to be more than a single use call. Currently passing the userID of the end user will 
 send them a collection featuring how to install the Book of Mormon on their device
 */
 const sendBookMessage = userId => {
-  return fetch(
-    `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`, {
-      headers: {
-        "Content-Type": "application/json"
+  messenger.send(new GenericTemplate({
+    elements: [element] = new Element([{
+      title: "The Book of Mormon",
+      image_url: "https://assets.ldscdn.org/0a/bf/0abf50527076758eb00e719b78d8491922daf1e0/teens_book_of_mormon.jpeg",
+      subtitle: "Another Testament of Jesus Christ",
+      default_action: {
+        type: "web_url",
+        url: "https://www.churchofjesuschrist.org/study/scriptures/bofm?lang=eng",
+        webview_height_ratio: "tall"
       },
-      method: "POST",
-      body: JSON.stringify({
-        messaging_type: "RESPONSE",
-        recipient: {
-          id: userId
-        },
-        message: {
-          attachment: {
-            type: "template",
-            payload: {
-              template_type: "generic",
-              elements: [{
-                title: "The Book of Mormon",
-                image_url: "https://assets.ldscdn.org/0a/bf/0abf50527076758eb00e719b78d8491922daf1e0/teens_book_of_mormon.jpeg",
-                subtitle: "Another Testament of Jesus Christ",
-                default_action: {
-                  type: "web_url",
-                  url: "https://www.churchofjesuschrist.org/study/scriptures/bofm?lang=eng",
-                  webview_height_ratio: "tall"
-                },
-                buttons: [{
-                    type: "web_url",
-                    url: "https://play.google.com/store/apps/details?id=org.lds.bom",
-                    title: "Download for Android"
-                  },
-                  {
-                    type: "web_url",
-                    url: "https://apps.apple.com/us/app/the-book-of-mormon/id547313550",
-                    title: "Download for iOS"
-                  },
-                  {
-                    type: "web_url",
-                    url: "https://www.churchofjesuschrist.org/study/scriptures/bofm",
-                    title: "Read Online"
-                  }
-                ]
-              }]
-            }
-          }
-          //text
-        }
-      })
-    }
-  );
-};
+      buttons: [
+        new Button({
+          type: "web_url",
+          url: "https://play.google.com/store/apps/details?id=org.lds.bom",
+          title: "Download for Android"
+        }),
+        new Button({
+          type: "web_url",
+          url: "https://apps.apple.com/us/app/the-book-of-mormon/id547313550",
+          title: "Download for iOS"
+        }),
+        new Button({
+          type: "web_url",
+          url: "https://www.churchofjesuschrist.org/study/scriptures/bofm",
+          title: "Read Online"
+        })
+      ]
+    }])
+  }), userId);
+}
 
 /*
 Pass this the userID, an array of buttons, the link that the user gets by clicking the template and the type.
@@ -211,34 +120,19 @@ Example usage:
  )
 */
 const sendMediaTemplate = (userId, buttons, type, link) => {
-  return fetch(
-    `https://graph.facebook.com/v7.0/me/messages?access_token=${FACEBOOK_ACCESS_TOKEN}`, {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify({
-        messaging_type: "RESPONSE",
-        recipient: {
-          id: userId
-        },
-        message: {
-          attachment: {
-            type: "template",
-            payload: {
-              template_type: "media",
-              elements: [{
-                media_type: type,
-                url: link,
-                buttons: buttons
-              }]
-            }
-          }
-          //text
-        }
-      })
+  messenger.send({
+    "attachment" : {
+      "type" : "template",
+      "payload": {
+        "template_type": "media",
+        "elements": [{
+          media_type: type,
+          url: link,
+          buttons: buttons
+        }]
+      }
     }
-  );
+  }, userId);
 };
 
 /*
@@ -256,12 +150,12 @@ function determineIntent(message, userId, info) {
     switch (message.value) {
       case "request_book":
 
-        setRead(userId);
+
         sendBookMessage(userId);
         break;
       case "basic_beliefs":
 
-        setRead(userId);
+
         sendTextMessage(
           userId,
           `${
@@ -283,7 +177,7 @@ function determineIntent(message, userId, info) {
         break;
       case "who_is_jesus":
 
-        setRead(userId);
+
         sendTextMessage(
           userId,
           "Jesus is the Son of God and our loving Savior. He lived to teach us, and  He suffered and died to save us from sin and death. Because of Him, we  can be forgiven, we can overcome challenges, and we can live with God  again someday.",
@@ -306,7 +200,7 @@ function determineIntent(message, userId, info) {
         break;
       case "meet_missionaries":
 
-        setRead(userId);
+
         sendQuickReplyMessage(
           userId,
           "We would love to help, how would you like us to get in contact with you?",
@@ -330,7 +224,7 @@ function determineIntent(message, userId, info) {
         break;
       case "info_book":
 
-        setRead(userId);
+
         sendTextMessage(
           userId,
           `${
@@ -357,7 +251,7 @@ function determineIntent(message, userId, info) {
         break;
       case "info_bible":
 
-        setRead(userId);
+
         sendTextMessage(
           userId,
           "Absolutely! We follow and believe in all of the teachings of the Bible, as well as the Book of Mormon. Together they preach and teach of Jesus Christ."
@@ -375,7 +269,7 @@ function determineIntent(message, userId, info) {
         break;
       case "life_purpose":
 
-        setRead(userId);
+
         sendTextMessage(
           userId,
           "Life is a proving ground for us.\nGod sent us to earth to learn and grow through experiences, both pleasant and painful. He lets us choose between good and evil and lets us decide whether we will serve others or focus only about ourselves. The challenge is to have faith in His plan even though we don’t have all of the answers. Because we all make mistakes, God sent His Son, Jesus Christ, so we can be cleansed and forgiven. When we accept Jesus and follow His example, we become less selfish and can enjoy greater love, peace, and joy."
@@ -425,7 +319,7 @@ function continuePayload(message, userId) {
     switch (message.quick_reply.payload) {
       case "request_phone":
 
-        setRead(userId);
+
         sendQuickReplyMessage(userId, "Sure, what is your phone number?", [{
           content_type: "user_phone_number",
           payload: "phone_sent"
@@ -433,7 +327,7 @@ function continuePayload(message, userId) {
         break;
       case "request_video":
 
-        setRead(userId);
+
         sendTextMessage(
           userId,
           "Ok, we will call you on messenger. When is a good day for you?"
@@ -441,7 +335,7 @@ function continuePayload(message, userId) {
         break;
       case "request_email":
 
-        setRead(userId);
+
         sendQuickReplyMessage(userId, "Sure, what is your Email?", [{
           content_type: "user_email",
           payload: "email_sent"
