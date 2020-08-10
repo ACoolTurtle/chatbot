@@ -72,8 +72,6 @@ const sendQuickReplyMessage = (userId, text, replies) => {
   const quickReplies = new QuickReplies(replies);
   const payload = Object.assign(finalText, quickReplies);
   messenger.send(payload, userId)
-  .then(console.log("me" + res))
-  .catch(err => console.log("help me" + err));
 };
 /*
 This likely needs to be refactored to be more than a single use call. Currently passing the userID of the end user will 
@@ -322,7 +320,7 @@ function continuePayload(message, userId) {
   } else {
     switch (message.quick_reply.payload) {
       case "request_phone":
-
+      console.log("We got to the switch");
 
         sendQuickReplyMessage(userId, "Sure, what is your phone number?", [new QuickReply({
           content_type: "user_phone_number",
