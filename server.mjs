@@ -61,7 +61,8 @@ messenger.on('message', (event) => {
   messenger.getUser(event.send.id)
   .then((user) => {
     console.log(JSON.stringify(user));
-    handleMessage(event, user)
+    console.log("user" + user);
+    //handleMessage(event, user)
   })
   //handleMessage(event, );
 });
