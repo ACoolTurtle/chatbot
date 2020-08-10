@@ -58,17 +58,17 @@ const verifyRequestSignature = (req, res, buf) => {
 messenger.on('message', (event) => {
   console.log(JSON.stringify(event));
   console.log(JSON.stringify(event.sender.id));
-  messenger.getUser(event.send.id)
+  messenger.getUser(event.sender.id)
   .then((user) => {
-    //console.log(JSON.stringify(user));
-    //console.log("user" + user);
-    //handleMessage(event, user)
+    console.log(JSON.stringify(user));
+    console.log("user" + user);
+    handleMessage(event, user)
   })
   //handleMessage(event, );
 });
 
 messenger.on('postback', (event) => {
-  messenger.getUser(event.send.id)
+  messenger.getUser(event.sender.id)
   .then((user) => {
     //handlePostback(event, user)
   })
