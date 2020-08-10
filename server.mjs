@@ -56,6 +56,7 @@ const verifyRequestSignature = (req, res, buf) => {
 };
 
 messenger.on('message', (event) => {
+  console.log(JSON.stringify(event));
   messenger.getUser()
   .then((user) => {
     handleMessage(event, user)
