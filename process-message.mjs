@@ -74,7 +74,34 @@ This likely needs to be refactored to be more than a single use call. Currently 
 send them a collection featuring how to install the Book of Mormon on their device
 */
 const sendBookMessage = userId => {
+  let element = new Element({
+    title: "The Book of Mormon",
+    image_url: "https://assets.ldscdn.org/0a/bf/0abf50527076758eb00e719b78d8491922daf1e0/teens_book_of_mormon.jpeg",
+    subtitle: "Another Testament of Jesus Christ",
+    buttons: [
+      new Button({
+        type: "web_url",
+        title: "Download for Android",
+        url: "https://play.google.com/store/apps/details?id=org.lds.bom"
+      }),
+      new Button({
+        type: "web_url",
+        title: "Download for iOS",
+        url: "https://apps.apple.com/us/app/the-book-of-mormon/id547313550"
+      }),
+      new Button({
+        type: "web_url",
+        title: "Read Online",
+        url: "https://www.churchofjesuschrist.org/study/scriptures/bofm"
+      }),
+    ]
+  })
   messenger.send(new GenericTemplate({
+    elements: [element]
+  }), userId)
+  .then(console.log("me" + res))
+  .catch(err => console.log("help me" + err));
+  /*messenger.send(new GenericTemplate({
     elements: [element] = new Element([{
       title: "The Book of Mormon",
       image_url: "https://assets.ldscdn.org/0a/bf/0abf50527076758eb00e719b78d8491922daf1e0/teens_book_of_mormon.jpeg",
@@ -102,9 +129,7 @@ const sendBookMessage = userId => {
         })
       ]
     }])
-  }), userId)
-  .then(console.log(res))
-  .catch(err => console.log(err));
+  }), userId)*/
 }
 
 /*
