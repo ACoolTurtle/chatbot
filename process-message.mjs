@@ -67,7 +67,12 @@ Similar to sendTextMessage, but pass an array of quick replies in the following 
   the end user selects a quick reply.
 */
 const sendQuickReplyMessage = (userId, text, replies) => {
-  messenger.send(Object.assign(new Text(text), replies), userId);
+  const finalText = new Text(text);
+  const quickReplies = new QuickReplies(replies);
+  const payload = Object.assign(finalText, quickReplies);
+  messenger.send(payload, userId)
+  .then(console.log("me" + res))
+  .catch(err => console.log("help me" + err));
 };
 /*
 This likely needs to be refactored to be more than a single use call. Currently passing the userID of the end user will 
@@ -99,37 +104,8 @@ const sendBookMessage = userId => {
   messenger.send(new GenericTemplate({
     elements: [element]
   }), userId)
-  .then(console.log("me" + res))
-  .catch(err => console.log("help me" + err));
-  /*messenger.send(new GenericTemplate({
-    elements: [element] = new Element([{
-      title: "The Book of Mormon",
-      image_url: "https://assets.ldscdn.org/0a/bf/0abf50527076758eb00e719b78d8491922daf1e0/teens_book_of_mormon.jpeg",
-      subtitle: "Another Testament of Jesus Christ",
-      default_action: {
-        type: "web_url",
-        url: "https://www.churchofjesuschrist.org/study/scriptures/bofm?lang=eng",
-        webview_height_ratio: "tall"
-      },
-      buttons: [
-        new Button({
-          type: "web_url",
-          url: "https://play.google.com/store/apps/details?id=org.lds.bom",
-          title: "Download for Android"
-        }),
-        new Button({
-          type: "web_url",
-          url: "https://apps.apple.com/us/app/the-book-of-mormon/id547313550",
-          title: "Download for iOS"
-        }),
-        new Button({
-          type: "web_url",
-          url: "https://www.churchofjesuschrist.org/study/scriptures/bofm",
-          title: "Read Online"
-        })
-      ]
-    }])
-  }), userId)*/
+  /*.then(console.log("me" + res))
+  .catch(err => console.log("help me" + err));*/
 }
 
 /*
@@ -231,21 +207,21 @@ function determineIntent(message, userId, info) {
         sendQuickReplyMessage(
           userId,
           "We would love to help, how would you like us to get in contact with you?",
-          [{
+          [new QuickReply({
               content_type: "text",
               title: "Email",
               payload: "request_email"
-            },
-            {
+            }),
+            new QuickReply({
               content_type: "text",
               title: "Phone",
               payload: "request_phone"
-            },
-            {
+            }),
+            new QuickReply({
               content_type: "text",
               title: "Video Call",
               payload: "request_video"
-            }
+            })
           ]
         );
         break;
@@ -347,10 +323,10 @@ function continuePayload(message, userId) {
       case "request_phone":
 
 
-        sendQuickReplyMessage(userId, "Sure, what is your phone number?", [{
+        sendQuickReplyMessage(userId, "Sure, what is your phone number?", [new QuickReply({
           content_type: "user_phone_number",
           payload: "phone_sent"
-        }]);
+        })]);
         break;
       case "request_video":
 
@@ -363,10 +339,10 @@ function continuePayload(message, userId) {
       case "request_email":
 
 
-        sendQuickReplyMessage(userId, "Sure, what is your Email?", [{
+        sendQuickReplyMessage(userId, "Sure, what is your Email?", [new QuickReply({
           content_type: "user_email",
           payload: "email_sent"
-        }]);
+        })]);
         break;
       default:
         break;
