@@ -483,6 +483,7 @@ Based on what is contained within the event object this function will complete s
 starting a conversation etc.
 */
 function handleMessage(event, info) {
+  console.log("Hey Listen " + JSON.stringify(event));
   const userId = event.sender.id;
   const message = event.message.text;
   if (
