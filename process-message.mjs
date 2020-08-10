@@ -68,10 +68,14 @@ Similar to sendTextMessage, but pass an array of quick replies in the following 
   the end user selects a quick reply.
 */
 const sendQuickReplyMessage = (userId, text, replies) => {
-  const finalText = new Text(text);
+  /*const finalText = new Text(text);
   const quickReplies = new QuickReplies(replies);
   const payload = Object.assign(finalText, quickReplies);
-  messenger.send(payload, userId)
+  messenger.send(payload, userId)*/
+  messenger.send({
+    text, 
+    quick_replies: replies
+  }, userId);
 };
 /*
 This likely needs to be refactored to be more than a single use call. Currently passing the userID of the end user will 
@@ -206,21 +210,22 @@ function determineIntent(message, userId, info) {
         sendQuickReplyMessage(
           userId,
           "We would love to help, how would you like us to get in contact with you?",
-          [new QuickReply({
+          //[new QuickReply(
+          [{
               content_type: "text",
               title: "Email",
               payload: "request_email"
-            }),
-            new QuickReply({
+            },//),
+            {
               content_type: "text",
               title: "Phone",
               payload: "request_phone"
-            }),
-            new QuickReply({
+            },
+            {
               content_type: "text",
               title: "Video Call",
               payload: "request_video"
-            })
+            }
           ]
         );
         break;
@@ -322,10 +327,10 @@ function continuePayload(message, userId) {
       case "request_phone":
       console.log("We got to the switch");
 
-        sendQuickReplyMessage(userId, "Sure, what is your phone number?", [new QuickReply({
+        sendQuickReplyMessage(userId, "Sure, what is your phone number?", [{
           content_type: "user_phone_number",
           payload: "phone_sent"
-        })]);
+        }]);
         break;
       case "request_video":
 
@@ -338,10 +343,10 @@ function continuePayload(message, userId) {
       case "request_email":
 
 
-        sendQuickReplyMessage(userId, "Sure, what is your Email?", [new QuickReply({
+        sendQuickReplyMessage(userId, "Sure, what is your Email?", [{
           content_type: "user_email",
           payload: "email_sent"
-        })]);
+        }]);
         break;
       default:
         break;

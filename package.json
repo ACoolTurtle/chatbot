@@ -7,7 +7,6 @@
     "node": "12.18.3"
   },
   "scripts": {
-    "postinstall": "cd ./node_modules/fbmessenger && npm install && npm run build",
     "start": "node server.mjs"
   },
   "keywords": [],
@@ -17,7 +16,7 @@
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "fbmessenger": "https://github.com/ACoolTurtle/fbmessenger-node.git",
+    "fbmessenger": "^5.0.3",
     "node-fetch": "^2.6.0"
   }
 }
