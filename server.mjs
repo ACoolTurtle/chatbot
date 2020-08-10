@@ -59,7 +59,7 @@ messenger.on('message', (event) => {
   messenger.getUser()
   .then((user) => {
     handleMessage(event, user)
-  }, event.sender,id)
+  }, event.sender.id)
   //handleMessage(event, );
 });
 
@@ -67,7 +67,7 @@ messenger.on('postback', (event) => {
   messenger.getUser()
   .then((user) => {
     handlePostback(event, user)
-  }, event.sender,id)
+  }, event.sender.id)
 });
 
 // Verify the webhook, calls verifyWebhook which confirms it is 
