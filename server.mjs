@@ -61,7 +61,7 @@ messenger.on('message', (event) => {
   messenger.getUser(event.send.id)
   .then((user) => {
     //console.log(JSON.stringify(user));
-    console.log("user" + user);
+    //console.log("user" + user);
     //handleMessage(event, user)
   })
   //handleMessage(event, );
@@ -70,7 +70,7 @@ messenger.on('message', (event) => {
 messenger.on('postback', (event) => {
   messenger.getUser(event.send.id)
   .then((user) => {
-    handlePostback(event, user)
+    //handlePostback(event, user)
   })
 });
 
