@@ -102,7 +102,9 @@ const sendBookMessage = userId => {
         })
       ]
     }])
-  }), userId);
+  }), userId)
+  .then(console.log(res))
+  .catch(err => console.log(err));
 }
 
 /*

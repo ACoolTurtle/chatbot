@@ -54,7 +54,6 @@ const verifyRequestSignature = (req, res, buf) => {
 
 messenger.on('message', (event) => {
   messenger.senderAction('mark_seen', event.sender.id);
-  messenger.senderAction('typing_on', event.sender.id);
   console.log(JSON.stringify(event));
   console.log(JSON.stringify(event.sender.id));
   messenger.getUser(event.sender.id)
