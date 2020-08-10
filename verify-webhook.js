@@ -8,6 +8,7 @@ const verifyWebhook = (req, res) => {
 
   if (mode && token === VERIFY_TOKEN) {
     res.status(200).send(challenge);
+    console.log("We are Called");
   } else {
     res.sendStatus(403);
   }
