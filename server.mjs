@@ -7,10 +7,11 @@
 import dotenv from 'dotenv';
 import fbMessenger from 'fbmessenger';
 import bodyParser from 'body-parser';
-import verifyWebhook from './verify-webhook.js'
-import messageWebhook from './message-webhook.js'
-import express from 'express'
-import processMessage from './process-message.js'
+import verifyWebhook from './verify-webhook.js';
+import messageWebhook from './message-webhook.js';
+import express from 'express';
+import processMessage from './process-message.js';
+import crypto from 'crypto';
 dotenv.config({
   path: ".env"
 });
