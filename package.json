@@ -18,7 +18,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "fbmessenger": "https://github.com/ACoolTurtle/fbmessenger-node#Dist",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "yarn": "^1.22.4"
   }
 }
